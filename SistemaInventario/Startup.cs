@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SistemaInventario.Data;
+using SistemaInventario.AccesosDatos.Data;
+//using SistemaInventario.AccesosDatos.Data;
+//using SistemaInventario.Modelos.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +32,15 @@ namespace SistemaInventario
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //  .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddDefaultIdentity<IdentityUser>()
+             .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddControllersWithViews();
+
+            //Se modifica lo siguiente en vista que se instalo paquete Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
 
@@ -62,7 +70,9 @@ namespace SistemaInventario
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    //pattern: "{controller=Home}/{action=Index}/{id?}");
+                    //Pero como ser agrego Area cambia la ruta
+                    pattern: "{area=Inventario}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
